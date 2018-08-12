@@ -39,7 +39,7 @@ def augment_data(y, sr, n_augment = 0, allow_speedandpitch = True, allow_pitch =
 
         # change speed and pitch together
         if (allow_speedandpitch) and random_onoff():   
-            length_change = np.random.uniform(low=0.9,high=1.1)
+            length_change = np.random.uniform(low=0.9,high=1.0)
             speed_fac = 1.0  / length_change
 #            print(tab+"    resample length_change = ",length_change)
             tmp = np.interp(np.arange(0,len(y),speed_fac),np.arange(0,len(y)),y)
@@ -60,7 +60,7 @@ def augment_data(y, sr, n_augment = 0, allow_speedandpitch = True, allow_pitch =
 
         # change speed (w/o pitch), 
         if (allow_speed) and random_onoff():   
-            speed_change = np.random.uniform(low=0.9,high=1.1)
+            speed_change = np.random.uniform(low=1.0,high=1.2)
 #            print(tab+"    speed_change = ",speed_change)
             tmp = librosa.effects.time_stretch(y_mod, speed_change)
             minlen = min( y.shape[0], tmp.shape[0])        # keep same length as original; 
@@ -88,7 +88,7 @@ def augment_data(y, sr, n_augment = 0, allow_speedandpitch = True, allow_pitch =
 
         # shift in time forwards or backwards
         if (allow_timeshift) and random_onoff():
-            timeshift_fac = 0.2 *2*(np.random.uniform()-0.5)  # up to 20% of length
+            timeshift_fac = 0.01 *2*(np.random.uniform()-0.5)  # up to 20% of length
 #            print(tab+"    timeshift_fac = ",timeshift_fac)
             start = int(length * timeshift_fac)
             if (start > 0):
@@ -108,7 +108,7 @@ def augment_data(y, sr, n_augment = 0, allow_speedandpitch = True, allow_pitch =
 
 
 
-def auto_aug(in_dir, n_augment):
+def auto_aug(in_dir,dst_dir, n_augment):
     np.random.seed(1)
     for path, pathname, filenames in os.walk(in_dir):
         for filename in filenames:
@@ -117,7 +117,7 @@ def auto_aug(in_dir, n_augment):
                 y, sr = librosa.load(os.path.join(path,filename), sr=None)
                 mods = augment_data(y, sr, n_augment=n_augment, allow_timeshift=False )
                 for i in range(len(mods)-1):
-                    filename_no_ext = os.path.splitext(os.path.join(path,filename))[0]
+                    filename_no_ext = os.path.splitext(os.path.join(dst_dir,filename))[0]
                     ext = os.path.splitext(os.path.join(path,filename))[1]
                     outfile = filename_no_ext+str(i+1)+ext
                     #librosa.output.write_wav(outfile, mods[i+1],sr)
@@ -126,13 +126,14 @@ def auto_aug(in_dir, n_augment):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) !=3:
+    if len(sys.argv) !=4:
         print("usage python sound_augment_plus.py base_dir  n_augment  \n it will augment all the file in the basedir")
         sys.exit()
     else:
         base_dir = sys.argv[1]
-        n_augment = int(sys.argv[2])
-        auto_aug(base_dir,n_augment)
+        dst_dir = sys.argv[2]
+        n_augment = int(sys.argv[3])
+        auto_aug(base_dir,dst_dir,n_augment)
 
 '''
     import argparse

@@ -2,7 +2,7 @@ import wave
 import contextlib
 import librosa
 def get_duration(wav_file):
-  y, sr = librosa.load('./test.wav',sr=16000)
+  y, sr = librosa.load(wav_file,sr=16000)
   return librosa.get_duration(y,sr=sr)
 
 if __name__ == "__main__":

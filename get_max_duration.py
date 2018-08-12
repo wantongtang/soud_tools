@@ -1,10 +1,9 @@
-from get_duration import get_duration
-
 
 import os
 import librosa 
+import sys
 
-base_dir = '../data7/chxb'
+base_dir = sys.argv[1] #'../data7/chxb'
 max_duration = 0
 max_duration_filename = ''
 min_duration = 1000

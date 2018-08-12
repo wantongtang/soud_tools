@@ -7,18 +7,20 @@ import os
 import librosa
 import sys
 from pydub import AudioSegment
-
-
-
+import scipy
+import numpy as np
 
 
 def duration_regular(filename,dst_duration=1500.0):
+  global k
   y, sr = librosa.load(filename,sr=16000)
   duration = librosa.get_duration(y=y,sr=sr)
-  if duration >1500:
+  print duration
+  if duration >1.5:
     speed = (float(duration*1000))/float(dst_duration)
     y_stretch = librosa.effects.time_stretch(y, speed)
-    librosa.output.write_wav(filename,y_stretch, sr=sr)
+    scipy.io.wavfile.write(filename,sr,np.int16(y_stretch*32768))
+#    librosa.output.write_wav(filename,y_stretch, sr=sr)
     print (filename)
   #librosa.output.write_wav('./testxx.wav',y_stretch, sr)
   
