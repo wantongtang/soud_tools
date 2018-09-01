@@ -20,7 +20,7 @@ def apart_wav_file(filename):
 if __name__ == '__main__':
   # delete all the file that duration more than 5s and apart them into two part
   k = 0  
-  base_dir = '../mydata/other/'
+  base_dir = '../data_xatx/xatx'
   for path,pathname,filenames in os.walk(base_dir):
     for filename in filenames:
       y, sr = librosa.load(os.path.join(base_dir,filename),sr = 16000)

@@ -19,7 +19,7 @@ if __name__ == "__main__":
     for filename in filenames:
       if filename.endswith('.wav'):
         if 1:# get_duration(os.path.join(path,filename)) >1.5:
-          os.system('./extract_loudest_sec %s %s'%(os.path.join(path,filename),path ))
+          os.system('./extract_loudest_sec001f %s %s'%(os.path.join(path,filename),path ))
           print(filename)
         else:
           print("passed")
